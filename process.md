@@ -1,3 +1,41 @@
+### Creating S3 Bucket not for public
+
+1. Enter Bucket name.
+2. Select Region (eu-london).
+3. Add tags. Owner (emailaddress), Environment (Dev, Test etc), CostCenter (01-429) JobNumber(268030-00).
+4. Keep all permission boxes selected.
+5. Upload files to the bucket by selecting add file or click-drag-drop files into container.
+6. Select properties then enable static website hosting (use this bucket to host a website). 
+7. Link index & error html file.
+8. Select permissions and add bucket policy object. Change Resource endpoint <kopaki-jc> to the bucket name
+
+```javascript 
+{
+    "Version": "2012-10-17",
+    "Id": "S3PolicyId1",
+    "Statement": [
+        {
+            "Sid": "IPAllow",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::kopaki-jc/*",
+            "Condition": {
+                "IpAddress": {
+                    "aws:SourceIp": [
+                        "192.168.0.0/16",
+                        "193.17.187.245/24",
+                        "10.0.0.0/8",
+                        "108.171.128.167/28",
+                        "172.16.0.0/12"
+                    ]
+                }
+            }
+        }
+    ]
+}
+```
+
 ### Linking S3 to CloudFront
 
 1. Step 1. Delivery method select Web Get Started.
